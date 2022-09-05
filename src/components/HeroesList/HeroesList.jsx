@@ -6,6 +6,7 @@ import {
   heroesFetching,
   heroesFetched,
   heroesFetchingError,
+  deleteHero,
 } from '../../actions'
 import HeroesListItem from '../HeroesListItem/HeroesListItem'
 import Spinner from '../Spinner/Spinner'
@@ -19,20 +20,26 @@ const HeroesList = () => {
   const { heroes, heroesLoadingStatus } = useSelector((state) => state)
   const dispatch = useDispatch()
   const { request } = useHttp()
+  const requestUrl = 'http://localhost:3001/heroes'
 
   useEffect(() => {
     dispatch(heroesFetching())
-    request('http://localhost:3001/heroes')
+    request(requestUrl)
       .then((data) => dispatch(heroesFetched(data)))
       .catch(() => dispatch(heroesFetchingError()))
-
-    // eslint-disable-next-line
   }, [])
 
   if (heroesLoadingStatus === 'loading') {
     return <Spinner />
-  } else if (heroesLoadingStatus === 'error') {
+  }
+  if (heroesLoadingStatus === 'error') {
     return <h5 className="text-center mt-5">Ошибка загрузки</h5>
+  }
+
+  const onDeleteHero = (id) => {
+    dispatch(deleteHero(id))
+
+    // request(`${requestUrl}/${id}`, 'DELETE')
   }
 
   const renderHeroesList = (arr) => {
@@ -41,7 +48,15 @@ const HeroesList = () => {
     }
 
     return arr.map(({ id, ...props }) => {
-      return <HeroesListItem key={id} {...props} />
+      return (
+        <HeroesListItem
+          key={id}
+          {...props}
+          onDeleteHero={() => {
+            onDeleteHero(id)
+          }}
+        />
+      )
     })
   }
 
