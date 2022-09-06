@@ -21,24 +21,34 @@
   ],
   "filters": [
     {
+      "id": "f1",
       "value": "all",
-      "label": "Я владею элементом..."
+      "label": "Я владею элементом...",
+      "classNames": "btn-outline-dark"
     },
     {
+      "id": "f2",
       "value": "fire",
-      "label": "Огонь"
+      "label": "Огонь",
+      "classNames": "btn-danger"
     },
     {
+      "id": "f3",
       "value": "water",
-      "label": "Вода"
+      "label": "Вода",
+      "classNames": "btn-primary"
     },
     {
+      "id": "f4",
       "value": "wind",
-      "label": "Ветер"
+      "label": "Ветер",
+      "classNames": "btn-success"
     },
     {
+      "id": "f5",
       "value": "earth",
-      "label": "Земля"
+      "label": "Земля",
+      "classNames": "btn-secondary"
     }
   ]
 }

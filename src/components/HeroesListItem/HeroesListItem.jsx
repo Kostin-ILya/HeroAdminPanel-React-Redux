@@ -38,7 +38,7 @@ const HeroesListItem = ({ name, description, element, onDeleteHero }) => {
           className="btn-close btn-close"
           aria-label="Close"
           onClick={onDeleteHero}
-        ></button>
+        />
       </span>
     </li>
   )

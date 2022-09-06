@@ -11,12 +11,24 @@ export const heroesFetched = (heroes) => {
   }
 }
 
-export const optionsFetched = (options) => {
+export const filtersFetching = () => {
   return {
-    type: 'OPTIONS_FETCHED',
+    type: 'FILTERS_FETCHING',
+  }
+}
+
+export const filtersFetched = (filters) => {
+  return {
+    type: 'FILTERS_FETCHED',
     payload: {
-      options,
+      filters,
     },
+  }
+}
+
+export const filtersFetchingError = () => {
+  return {
+    type: 'FILTERS_FETCHING_ERROR',
   }
 }
 
@@ -40,6 +52,15 @@ export const addHero = (hero) => {
     type: 'ADD_HERO',
     payload: {
       hero,
+    },
+  }
+}
+
+export const changeFilter = (filter) => {
+  return {
+    type: 'CHANGE_FILTER',
+    payload: {
+      filter,
     },
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import useHttp from '../../hooks/http.hook'
 
@@ -11,13 +11,10 @@ import {
 import HeroesListItem from '../HeroesListItem/HeroesListItem'
 import Spinner from '../Spinner/Spinner'
 
-// Задача для этого компонента:
-// При клике на "крестик" идет удаление персонажа из общего состояния
-// Усложненная задача:
-// Удаление идет и с json файла при помощи метода DELETE
-
 const HeroesList = () => {
-  const { heroes, heroesLoadingStatus } = useSelector((state) => state)
+  const { heroes, heroesLoadingStatus, activeFilter } = useSelector(
+    (state) => state
+  )
   const dispatch = useDispatch()
   const { request } = useHttp()
   const requestUrl = 'http://localhost:3001/heroes'
@@ -29,17 +26,21 @@ const HeroesList = () => {
       .catch(() => dispatch(heroesFetchingError()))
   }, [])
 
+  const onDeleteHero = useCallback((id) => {
+    request(`${requestUrl}/${id}`, 'DELETE')
+      .then(() => {
+        dispatch(deleteHero(id))
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+  })
+
   if (heroesLoadingStatus === 'loading') {
     return <Spinner />
   }
   if (heroesLoadingStatus === 'error') {
     return <h5 className="text-center mt-5">Ошибка загрузки</h5>
-  }
-
-  const onDeleteHero = (id) => {
-    dispatch(deleteHero(id))
-
-    // request(`${requestUrl}/${id}`, 'DELETE')
   }
 
   const renderHeroesList = (arr) => {
@@ -60,8 +61,24 @@ const HeroesList = () => {
     })
   }
 
-  const elements = renderHeroesList(heroes)
-  return <ul>{elements}</ul>
+  const filterItems = (heroesArr, filter) => {
+    switch (filter) {
+      case 'fire':
+        return heroesArr.filter((item) => item.element === 'fire')
+      case 'wind':
+        return heroesArr.filter((item) => item.element === 'wind')
+      case 'water':
+        return heroesArr.filter((item) => item.element === 'water')
+      case 'earth':
+        return heroesArr.filter((item) => item.element === 'earth')
+      default:
+        return heroesArr
+    }
+  }
+
+  const visibleElements = renderHeroesList(filterItems(heroes, activeFilter))
+
+  return <ul>{visibleElements}</ul>
 }
 
 export default HeroesList
